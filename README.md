@@ -19,7 +19,7 @@ Python --use_env main_pretrain_multi_datasets_xray.py \
  --batch_size 256 \
  --model mae_vit_small_patch16 \
  --mask_ratio 0.6 \
- --curri True
+ --curri True \
  --epochs 800 \
  --warmup_epochs 40 \
  --blr 1.5e-4 --weight_decay 0.05 \
@@ -57,7 +57,7 @@ python --use_env main_finetune_chestxray.py \
     --aa 'rand-m6-mstd0.5-inc1'
     -- best_model ‘loss’ \
     -- data_type ‘multi-label’ \
-    -- average ‘weighted’ \
+    -- average ‘weighted’ 
 ```
 
 ## Citation
