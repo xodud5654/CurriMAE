@@ -76,7 +76,7 @@ def get_args_parser():
                         help='epochs to warmup LR')
 
     # Dataset parameters
-    parser.add_argument('--data_path', default='', type=str,
+    parser.add_argument('--data_path',
                         help='dataset path')
 
     parser.add_argument('--output_dir', default='./output_dir/memory_test',
@@ -157,12 +157,15 @@ def main(args):
                 }
     ###############################################################################################################
     import glob2
+    
+    total_data_path = []
 
-
-    CXR8 = glob2.glob("/mnt/hdd1/SSL_CXR/data/CXR8/images/*/*/*.png")
-    CheXpert = glob2.glob("/mnt/hdd1/SSL_CXR/data/CheXpert-v1.0-small/*/*/*/*frontal.jpg")
-    total_data_path = CXR8+CheXpert
-    # total_data_path = glob2.glob("/media/airl2/hdd1/backup/data/OCT/OCT/train/*/*.jpeg")
+    if isinstance(data_path, list):
+        for data_p in data_path:
+            total_data_path.extend(glob2.glob(data_p))
+    else:
+        total_data_path = glob2.glob(data_path)
+        # total_data_path = glob2.glob("/media/airl2/hdd1/backup/data/OCT/OCT/train/*/*.jpeg")
     dataset_mean = [0.485, 0.456, 0.406]
     dataset_std = [0.229, 0.224, 0.225]
     transform_train = transforms.Compose([
@@ -246,14 +249,10 @@ def main(args):
         
         if args.curri:
             ratioes = [0.6,0.7,0.8,0.9]
-            # if (epoch) % 200 == 0 and epoch != 799:                                                
-                # args.mask_ratio = ratioes[((epoch) // 200)]                        
-                # print(f"epoch : {epoch}, mask_ratio : {args.mask_ratio}")
-            if epoch < 125: ratio = ratioes[0]
-            elif epoch < 300: ratio = ratioes[1]
-            elif epoch < 525: ratio = ratioes[2]
-            else: ratio = ratioes[3]
-            
+            if (epoch) % 200 == 0 and epoch != 799:                                                
+                args.mask_ratio = ratioes[((epoch) // 200)]                        
+                print(f"epoch : {epoch}, mask_ratio : {args.mask_ratio}")
+           
             if args.mask_ratio != ratio: 
                 print(f"epoch : {epoch}, mask_ratio : {args.mask_ratio}")
             args.mask_ratio = ratio
@@ -275,8 +274,7 @@ def main(args):
                 log_writer.flush()
             with open(os.path.join(args.output_dir, "log.txt"), mode="a", encoding="utf-8") as f:
                 f.write(json.dumps(log_stats) + "\n")
-        if (epoch+1) in [125,300,525,800]:
-        # if (epoch+1) in [200,400,600,800]:
+        if (epoch+1) in [200,400,600,800]:
             misc.save_model(
                 args=args, model=model, model_without_ddp=model_without_ddp, optimizer=optimizer,
                 loss_scaler=loss_scaler, epoch=epoch)
@@ -289,14 +287,12 @@ def main(args):
 if __name__ == '__main__':
     args = get_args_parser()
     args = args.parse_args()
-    # main_path = "/mnt/hdd1/SSL_CXR/result/pretrain/curriMAE_vanilla"
     main_path = "/media/airl2/hdd1/backup/pretrained_model/OCT/CurriMAE"
     args.epochs = 800
 
     args.mask_ratio = 0.6
     args.curri = True
-    args.output_dir = f"{main_path}/curriMAE_vanilla(6to9)_256batch_{args.epochs}epoch(125_300_525_800)"
-    # args.output_dir = f"{main_path}/CurriMAE_vanilla(6to9)_256batch_{args.epochs}epoch(200_400_600_800)"
+    args.output_dir = f"{main_path}/CurriMAE_vanilla(6to9)_256batch_{args.epochs}epoch(200_400_600_800)"
     args.log_dir = args.output_dir
     
     if args.output_dir:
