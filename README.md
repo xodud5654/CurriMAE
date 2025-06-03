@@ -2,6 +2,9 @@
 
 ## Paper
  TBD
+
+# model Architecture
+![Image](https://github.com/user-attachments/assets/bf8f4192-4f58-4d62-a24c-fdfe6237baeb)
 # Pre-training
 
 ## Self-supervised with Chest X-rays (ViTs)
