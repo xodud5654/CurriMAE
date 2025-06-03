@@ -14,6 +14,7 @@ We pretrain ViTs with MAE following the official repo but with **a customized re
 
 ```
 Python --use_env main_pretrain_multi_datasets_xray.py \
+ --data_path ${TRAIN_DATA_PATH} \
  --output_dir ${SAVE_DIR} \
  --log_dir ${SAVE_DIR} \
  --batch_size 256 \
