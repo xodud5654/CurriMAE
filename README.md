@@ -1,7 +1,6 @@
 # CurriMAE
 
-## Paper
- ![Url](https://peerj.com/articles/cs-3019/)
+## [Paper](https://peerj.com/articles/cs-3019/)
 
 # model Architecture
 ![Image](https://github.com/user-attachments/assets/bf8f4192-4f58-4d62-a24c-fdfe6237baeb)
